@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "ap-south-1"
+  region = var.region
 }
 
 module "key_name"{
@@ -65,16 +65,17 @@ module "my_ec2" {
   name          = var.name
 }
 
-module "eks_cluster" {
-  source           = "./modules/eks"
-  cluster_name     = var.cluster_name
-  cluster_version  = var.cluster_version
-  vpc_id           = var.vpc_id
-  subnet_ids       = var.subnet_ids
-  node_group_name  = var.node_group_name
-  instance_type    = var.node_instance_type
-  desired_capacity = var.desired_capacity
-  min_capacity     = var.min_capacity
-  max_capacity     = var.max_capacity
-  node_disk_size   = var.node_disk_size
+module "eks" {
+  source = "./modules/eks"
+
+  cluster_name      = var.cluster_name
+  cluster_version   = var.cluster_version
+  vpc_id            = var.vpc_id
+  public_subnet_ids = var.public_subnet_ids
+#   private_subnet_ids = var.private_subnest_ids
+  node_instance_type = var.node_instance_type
+  desired_capacity    = var.desired_capacity
+  public_key_path     = "${var.public_key_path}${var.key_name}"
+
+  depends_on = [module.key_name]
 }

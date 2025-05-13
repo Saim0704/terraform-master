@@ -66,42 +66,22 @@ variable "name" {
 
 ################################## EKS CLUSTER #####################
 
+variable "region" {}
+
 variable "cluster_name" {}
 
 variable "cluster_version" {
   default = "1.29"
 }
 
-# variable "vpc_id" {}
-
-variable "subnet_ids" {
+variable "public_subnet_ids" {
   type = list(string)
 }
 
-variable "node_group_name" {}
-
 variable "node_instance_type" {
-  default = "t2.large"
+  default = "t3.medium"
 }
 
-variable "desired_capacity" {
-  default = 2
-}
+variable "desired_capacity" {}
 
-variable "min_capacity" {
-  default = 1
-}
-
-variable "max_capacity" {
-  default = 2
-}
-
-variable "node_disk_size" {
-  default = 20
-}
-
-variable "region" {
-  description = "Cluster Region"
-  type = string
-  default = "ap-south-1"  
-}
+variable "public_key_path" {}
