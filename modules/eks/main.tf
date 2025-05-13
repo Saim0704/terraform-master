@@ -38,23 +38,41 @@ resource "aws_eks_node_group" "nodes" {
 
   scaling_config {
     desired_size = var.desired_capacity
-    max_size     = 3
-    min_size     = 1
+    max_size     = var.max_size
+    min_size     = var.min_size
   }
 
   instance_types = [var.node_instance_type]
 
   remote_access {
-    ec2_ssh_key = aws_key_pair.eks_key.key_name
+    ec2_ssh_key = aws_key_pair.generated.key_name
+    # aws_key_pair.eks_key.key_name
   }
 
   depends_on = [aws_eks_cluster.this]
 }
 
-resource "aws_key_pair" "eks_key" {
-  key_name   = "${var.cluster_name}-eks-key"
-  public_key = file(var.public_key_path)
+resource "tls_private_key" "generated" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
 }
+
+resource "aws_key_pair" "generated" {
+  key_name   = "${var.cluster_name}-eks-key"
+  public_key = tls_private_key.generated.public_key_openssh
+}
+
+resource "local_file" "private_key_pem" {
+  content          = tls_private_key.generated.private_key_pem
+  filename         = "${path.root}/keys/${var.cluster_name}-eks-key.pem"
+  file_permission  = "0600"
+  depends_on       = [aws_key_pair.generated]
+}
+
+# resource "aws_key_pair" "eks_key" {
+#   key_name   = "${var.cluster_name}-eks-key"
+#   public_key = file(var.public_key_path)
+# }
 
 resource "aws_iam_role" "eks_node_role" {
   name = "${var.cluster_name}-eks-node-role"

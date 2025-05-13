@@ -9,3 +9,7 @@ output "public_key" {
 output "private_key_path" {
   value = local_file.private_key_pem.filename
 }
+
+# output "public_key_content" {
+#   value = file("${path.root}/keys/${var.key_name}.pem")
+# }

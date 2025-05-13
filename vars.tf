@@ -84,4 +84,8 @@ variable "node_instance_type" {
 
 variable "desired_capacity" {}
 
-variable "public_key_path" {}
+variable "max_size" {}
+
+variable "min_size" {}
+
+# variable "public_key_path" {}

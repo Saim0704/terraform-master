@@ -1,1 +1,15 @@
+# Terraform state files
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfstate.*
+
+# Terraform crash logs
+crash.log
+
+# Local .terraform directory (provider plugins, modules, etc.)
 .terraform/
+
+# Terraform CLI configuration files
+.terraform.rc
+terraform.rc
+

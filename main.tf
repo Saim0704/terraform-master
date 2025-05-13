@@ -59,7 +59,7 @@ module "my_ec2" {
   ami_id        = var.ami_id # Replace with your region's AMI
   instance_type = var.instance_type
   subnet_id     = var.subnet_id      # Replace with your subnet ID
-  key_name      = var.key_name          # Replace with your key pair name
+  key_name      = var.key_name       # Replace with your key pair name
   security_group_ids = [module.securitygroup.security_group_id]
   root_volume_size = var.root_volume_size
   name          = var.name
@@ -75,7 +75,9 @@ module "eks" {
 #   private_subnet_ids = var.private_subnest_ids
   node_instance_type = var.node_instance_type
   desired_capacity    = var.desired_capacity
-  public_key_path     = "${var.public_key_path}${var.key_name}"
+  max_size = var.max_size
+  min_size = var.min_size
+  # ec2_ssh_key     =  "${path.root}/keys/${var.key_name}.pem"
 
   depends_on = [module.key_name]
 }
